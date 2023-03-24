@@ -2,23 +2,23 @@ import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 import { fetchCountries } from './fetchCountries.js';
-const DEBOUNCE_DELAY = 300;
+const DEBOUNCE_DELAY = 500;
 
-const input = document.querySelector('#search-box');
-const list = document.querySelector('.country-list');
-const info = document.querySelector('.country-info');
+const inputEl = document.querySelector('#search-box');
+const listEl = document.querySelector('.country-list');
+const infoEl = document.querySelector('.country-info');
 
-
-
-input.addEventListener('input', debounce(inputCountriues, DEBOUNCE_DELAY));
+inputEl.addEventListener('input', debounce(inputCountriues, DEBOUNCE_DELAY));
 
 function inputCountriues(e) {
-  const input = e.target.value.trim();
-  const url = `https://restcountries.com/v3.1/name/${input}?fields=name,capital,population,flags,languages`;
+  const inputValue = e.target.value.trim();
+  const url = `https://restcountries.com/v3.1/name/${inputValue}?fields=name,capital,population,flags,languages`;
+  if (inputValue === '') {
+    return cleaeMarcup();
+  }
   fetchCountries(url)
     .then(response => {
       if (!response.ok) {
-        cleaeMarcup();
         return Notiflix.Notify.failure(
           'Oops, there is no country with that name'
         );
@@ -47,7 +47,7 @@ function marcupList(element) {
         return `<li class="country-list__item" ><img src="${e.flags.svg}" width = 30 height = 20><p>${e.name.official}</p></li>`;
       })
       .join('');
-    list.innerHTML = marcup;
+    listEl.innerHTML = marcup;
   } else {
     cleaeMarcup();
     const marcup = element
@@ -68,11 +68,11 @@ function marcupList(element) {
 </ul>`;
       })
       .join('');
-    info.innerHTML = marcup;
+    infoEl.innerHTML = marcup;
   }
 }
 
 function cleaeMarcup() {
-  list.innerHTML = '';
-  info.innerHTML = '';
+  listEl.innerHTML = '';
+  infoEl.innerHTML = '';
 }

@@ -2,7 +2,7 @@ import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 import { fetchCountries } from './fetchCountries.js';
-const DEBOUNCE_DELAY = 500;
+const DEBOUNCE_DELAY = 300;
 
 const inputEl = document.querySelector('#search-box');
 const listEl = document.querySelector('.country-list');
@@ -19,9 +19,7 @@ function inputCountriues(e) {
   fetchCountries(url)
     .then(response => {
       if (!response.ok) {
-        return Notiflix.Notify.failure(
-          'Oops, there is no country with that name'
-        );
+         throw new Error(response.status)
       }
       return response.json();
     })
